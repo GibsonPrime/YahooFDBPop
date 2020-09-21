@@ -3,21 +3,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
 
-# Parameters for the database
-protocol = "mssql+pyodbc"
-user = "SQLLogin"
-password = "SQLLogin123!"
-host = "localhost\\SQLEXPRESS"
-port = 1433
-dbname = "MarketData"
-driver =  "ODBC+Driver+17+for+SQL+Server"
- 
-# Connect to the database
-# Remote
-# conn_str = '{0}://{1}:{2}@{3}:{4}/{5}?driver={6}'.format(protocol, user, password, host, port, dbname, driver)
-# Local
-conn_str = '{0}://{1}:{2}@{3}/{4}?driver={5}'.format(protocol, user, password, host, dbname, driver)
-engine = create_engine(conn_str, encoding='utf8')
 Base = declarative_base()
 
 # Currencies table
@@ -87,48 +72,11 @@ class Symbol(Base):
 	symbol = Column(String(10), unique=True)
 	exchange_id = Column(Integer, ForeignKey(Exchange.id))
 	country_id = Column(Integer, ForeignKey(Country.id))
-	shortname = Column(String(60), nullable=False, unique=True)
-	longname = Column(String(120), nullable=False, unique=True)
+	shortname = Column(String(60), nullable=False)
+	longname = Column(String(120), nullable=False)
 
 	exchange = relationship('Exchange', foreign_keys='Symbol.exchange_id')
 	country = relationship('Country', foreign_keys='Symbol.country_id')	
 
 	def __repr__(self):
 		return '<Symbol id: %s>' % self.id
-
-Base.metadata.create_all(engine)
-"""
-# Setup session - this should be setup globally for an application
-Session = sessionmaker(bind=engine)
-conn = engine.connect()
-session = Session(bind=conn)
-
-# Execute stuff - this should be run for each operation
-try:    
-    thinginst = Thing(name='ThingName1')
-    session.add(thinginst)
-
-    print(thinginst.id)
-
-    session.commit()
-except:
-    session.rollback()
-    raise
-finally:
-    session.close()"""
-
-
-""" 
-# define parameters to be passed in and out
-parameterIn = 1
-parameterOut = "@parameterOut"
-try:
-    cursor = connection.cursor()
-    cursor.callproc("storedProcedure", [parameterIn, parameterOut])
-    # fetch result parameters
-    results = list(cursor.fetchall())
-    cursor.close()
-    connection.commit()
-finally:
-    connection.close() 
-   """

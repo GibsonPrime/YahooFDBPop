@@ -1,6 +1,6 @@
 import yfinance as yf
 
-sym = "RBS"
+sym = "SRNE"
 
 
 msft = yf.Ticker(sym)
